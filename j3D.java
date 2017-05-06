@@ -34,32 +34,8 @@ public class j3D {
         viewMatrix = new Matrix4f();
         
     }
-    public final Matrix4f getWorldMatrixForQuadXP1(){
-       Matrix4f x = this.getWorldMatrix(new Vector3f(1,0,0), new Vector3f(0,90,0), 1);
-       return x;
-    }
-    public final Matrix4f getWorldMatrixForQuadXM1(){
-        Matrix4f x = this.getWorldMatrix(new Vector3f(-1,0,0), new Vector3f(0,90,0), 1);
-        return x;
-    }
-    public final Matrix4f getWorldMatrixForQuadZP1(){
-        Matrix4f x = this.getWorldMatrix(new Vector3f(0,1,0), new Vector3f(0,0,0), 1);
-        return x;
-    }
-    public final Matrix4f getWorldMatrixForQuadZM1(){
-        Matrix4f x = this.getWorldMatrix(new Vector3f(0,-1,0), new Vector3f(0,0,0), 1);
-        return x;
-    }
-    public final Matrix4f getWorldMatrixForQuadYP1(){
-        //TODO
-        Matrix4f x = this.getWorldMatrix(new Vector3f(0,0,1), new Vector3f(90,0,0), 1);
-        return x;
-    }
-    public final Matrix4f getWorldMatrixForQuadYM1(){
-        //TODO
-        Matrix4f x = this.getWorldMatrix(new Vector3f(0,0,1), new Vector3f(90,0,0), 1);
-        return x;
-    }
+    
+    
         public final Matrix4f getProjectionMatrix(float width, float height) {
         float aspectRatio = width / height;        
         projectionMatrix.identity();
