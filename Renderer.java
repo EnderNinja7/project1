@@ -60,7 +60,7 @@ public class Renderer {
     
     private j3D j3d;
     
-    private final IntBuffer vertexCount;
+    private int vertexCount = 0;
     
     public Renderer(String fragmentShaderCode, String vertexShaderCode, j3D j3d, Camera cam, Window window){
         this.j3d = j3d;
@@ -92,40 +92,6 @@ public class Renderer {
        glUseProgram(programId); 
        
        
-              float[] vertices = {
-                       // V0
-            -0.5f, 0.5f, 0.0f,
-            // V1
-            -0.5f, -0.5f, 0.0f,
-            // V2
-            0.5f, -0.5f, 0.0f,
-            // V3
-            0.5f, 0.5f, 0.0f,
-       }  ;
-       int[] indices = {
-                       // Front face
-            0, 1, 3, 3, 1, 2,
-       };
-
-       float[] normals = {
-           //F1
-        0.0f, -1.0f, 0.0f,
-       };
-       int vao = glGenVertexArrays();
-       glBindVertexArray(vao);
-       //Position VBO
-       int vbo = glGenBuffers();
-       FloatBuffer fb = MemoryUtil.memAllocFloat(vertices.length);
-       fb.put(vertices).flip();
-       glBindBuffer(GL_ARRAY_BUFFER, vbo);
-       glBufferData(GL_ARRAY_BUFFER, fb, GL_STATIC_DRAW);
-       glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-       //Elements VBO
-       int evbo = glGenBuffers();
-       vertexCount = BufferUtils.createIntBuffer(indices.length);
-       vertexCount.put(indices).flip();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, evbo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount, GL_STATIC_DRAW);
 
     }
         public int createUniform(String uniformName){
@@ -150,29 +116,47 @@ public class Renderer {
     public void setUniform(int uniformName, Vector3f value) {
         glUniform3f(uniformName, value.x, value.y, value.z);
     }
-    public void renderCubes(FloatBuffer colors,FloatBuffer ifb){
+public void renderCubes(FloatBuffer colors,FloatBuffer vertices){
+     vertexCount = vertices.array().length/3;
                //COLORS VBO
+
        int colVbo = glGenBuffers();
+
        
+
        glBindBuffer(GL_ARRAY_BUFFER, colVbo);
+
        glBufferData(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
+
        glVertexAttribPointer(1, 3, GL_FLOAT, false, 0,0);
-       //Instanced VBO
-       int instVbo = glGenBuffers();
-       glBindBuffer(GL_ARRAY_BUFFER, colVbo);
-       glBufferData(GL_ARRAY_BUFFER, ifb, GL_STATIC_DRAW);
-       glVertexAttribPointer(2, 3, GL_FLOAT, false, 0,0);
-       glVertexAttribDivisor(2, 1);
+
+       //Verts VBO
+
+       int vbo = glGenBuffers();
+
+       glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+       glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+       glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
        //Enable vertex attribs
+
        glEnableVertexAttribArray(0);
+
         glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
+
         //Draw the mesh
-       glDrawElementsInstanced(GL_TRIANGLES, vertexCount, 100);
+
+       glDrawArrays(GL_TRIANGLES,0, vertexCount);
+
        //Restore state
+
        glDisableVertexAttribArray(0);
+
         glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
+
         glBindVertexArray(0);
+
     }
 }
